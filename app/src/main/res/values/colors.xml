@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="main_activity_background">#00ffff</color>
+    <color name="colorAccent">#FFF</color>
+    <color name="main_activity_background">#80ff00</color>
     <color name="alarm_activity_background">#ff0000</color>
 </resources>

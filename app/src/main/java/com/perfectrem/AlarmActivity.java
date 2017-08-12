@@ -8,10 +8,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import dependents.com.perfectrem.R;
 
 public class AlarmActivity extends AppCompatActivity {
@@ -24,8 +24,9 @@ public class AlarmActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alarm_activity_layout);
         
-        Button button = (Button) findViewById(R.id.button_stop_alarm);
-        button.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton floatingActionButton = (FloatingActionButton)
+            findViewById(R.id.floating_action_button_stop_alarm);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mMediaPlayer.stop();
