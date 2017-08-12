@@ -8,9 +8,10 @@
               android:gravity="center"
               android:background="@color/alarm_activity_background"
               android:weightSum="1">
+    <!-- Using 0dp instead of 50dp for android:layout_width for optimisation.  -->
     <android.support.design.widget.FloatingActionButton
             android:id="@+id/floating_action_button_stop_alarm"
-            android:layout_width="50dp"
+            android:layout_width="0dp"
             android:layout_height="181dp"
             android:elevation="24dp"
             app:rippleColor="@android:color/holo_orange_dark"
