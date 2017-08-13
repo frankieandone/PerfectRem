@@ -80,17 +80,4 @@ public class AlarmActivity extends AppCompatActivity {
             mVibrator.vibrate(pattern, repeatAtIndexOf);
         }
     }
-    
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mVibrator != null) {
-            mVibrator.cancel();
-        }
-        
-        if (mMediaPlayer != null) {
-            mMediaPlayer.stop();
-            mMediaPlayer.release();
-        }
-    }
 }
