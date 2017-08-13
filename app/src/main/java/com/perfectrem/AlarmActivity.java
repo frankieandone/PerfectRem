@@ -29,8 +29,12 @@ public class AlarmActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mMediaPlayer.stop();
-                mVibrator.cancel();
+                if (mMediaPlayer != null) {
+                    mMediaPlayer.stop();
+                }
+                if (mVibrator != null) {
+                    mVibrator.cancel();
+                }
             }
         });
         
@@ -66,12 +70,27 @@ public class AlarmActivity extends AppCompatActivity {
             Log.e(TAG, "Device doesn't have a vibrator therefore it can't vibrate.");
             return;
         }
+        
+        final long[] pattern = { 0, 750, 3000, 1000, 3000, 1250, 3000, 1250, 3000 };
+        // Indicates to the mVibrator at which index (of the pattern) to loop the vibration effect.
+        int repeatAtIndexOf = 0;
         // Vibrate.vibrate(long milliseconds) is deprecated in API level 26.
         // NOTE: This app targets API level 25 thus it should be fine to the ignore API level 26 case.
         if (Build.VERSION.SDK_INT < 26) {
-            while (mMediaPlayer.isPlaying()) {
-                mVibrator.vibrate(500);
-            }
+            mVibrator.vibrate(pattern, repeatAtIndexOf);
+        }
+    }
+    
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mVibrator != null) {
+            mVibrator.cancel();
+        }
+        
+        if (mMediaPlayer != null) {
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
         }
     }
 }
