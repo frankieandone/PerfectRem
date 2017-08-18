@@ -5,4 +5,5 @@
     <color name="colorAccent">#FFF</color>
     <color name="main_activity_background">#ff0000</color>
     <color name="alarm_activity_background">#ff0000</color>
+    <color name="alarm_activity_secondary_background">#e60000</color>
 </resources>

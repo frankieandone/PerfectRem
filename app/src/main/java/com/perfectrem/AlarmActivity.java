@@ -1,23 +1,31 @@
 package com.perfectrem;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import dependents.com.perfectrem.R;
+import java.lang.Runnable;
 
 public class AlarmActivity extends AppCompatActivity {
     private static final String TAG = "AlarmActivity";
     private MediaPlayer mMediaPlayer;
     private Vibrator mVibrator;
+    private Handler mChangeColorHandler;
+    private Runnable mChangeColorRunnable;
+    private Handler mIncreaseVolumeHandler;
+    private VolumeIncrementRunnable mVolumeIncrementRunnable;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,11 +37,17 @@ public class AlarmActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mMediaPlayer != null) {
+                if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
                     mMediaPlayer.stop();
                 }
                 if (mVibrator != null) {
                     mVibrator.cancel();
+                }
+                if (mChangeColorHandler != null && mChangeColorRunnable != null) {
+                    mChangeColorHandler.removeCallbacks(mChangeColorRunnable);
+                }
+                if (mIncreaseVolumeHandler != null && mVolumeIncrementRunnable != null) {
+                    mIncreaseVolumeHandler.removeCallbacks(mVolumeIncrementRunnable);
                 }
             }
         });
@@ -59,6 +73,11 @@ public class AlarmActivity extends AppCompatActivity {
             mMediaPlayer.prepare();
             mMediaPlayer.start();
             vibrate();
+            toggleBackgroundColor();
+            mIncreaseVolumeHandler = new Handler();
+            mVolumeIncrementRunnable =
+            new VolumeIncrementRunnable((AudioManager) getSystemService(Context.AUDIO_SERVICE),
+            mIncreaseVolumeHandler);
         } catch (Exception ex) {
             Log.e(TAG, "Trouble playing sound.");
         }
@@ -78,6 +97,54 @@ public class AlarmActivity extends AppCompatActivity {
         // NOTE: This app targets API level 25 thus it should be fine to the ignore API level 26 case.
         if (Build.VERSION.SDK_INT < 26) {
             mVibrator.vibrate(pattern, repeatAtIndexOf);
+        }
+    }
+
+    private void toggleBackgroundColor() {
+        final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.alarm_activity_layout);
+        final int mainColor = getResources().getColor(R.color.alarm_activity_background, null),
+            secondaryColor = getResources().getColor(R.color.alarm_activity_secondary_background, null);
+        mChangeColorHandler = new Handler();
+        mChangeColorRunnable = new Runnable() {
+            @Override
+            public void run() {
+                ColorDrawable viewColor = (ColorDrawable) linearLayout.getBackground();
+                if (viewColor.getColor() == mainColor) {
+                    linearLayout.setBackgroundColor(secondaryColor);
+                } else {
+                    linearLayout.setBackgroundColor(mainColor);
+                }
+                mChangeColorHandler.postDelayed(this, 1000);
+            }
+        };
+        mChangeColorHandler.postDelayed(mChangeColorRunnable, 1000);
+    }
+
+    class VolumeIncrementRunnable implements Runnable {
+        private AudioManager mAudioManager;
+        private Handler mHandler;
+        private static final int INCREMENT_INTERVAL_MS = 5000;
+        private int mIncrementsIndex;
+        private final int[] INCREMENTS_ARR = { 1, 1, 2, 3, 5, 8, 13, 21 };
+        private final int MAX_VOLUME;
+    
+        VolumeIncrementRunnable(AudioManager audioManager, Handler handler) {
+            mAudioManager = audioManager;
+            mHandler = handler;
+            MAX_VOLUME = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
+        }
+    
+        @Override
+        public void run() {
+            int volume = mAudioManager.getStreamVolume(AudioManager.STREAM_ALARM);
+            int nextVolume = INCREMENTS_ARR[mIncrementsIndex] + volume;
+            if (mIncrementsIndex <= INCREMENTS_ARR.length && volume < MAX_VOLUME && nextVolume < MAX_VOLUME) {
+                mIncrementsIndex++;
+                // Android Studio complains that it can not find AudioManager.FLAG_FIXED_VOLUME.
+                // Thus, 1 << 5 is used instead.
+                mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, nextVolume, 1 << 5);
+                mHandler.postDelayed(this, INCREMENT_INTERVAL_MS);
+            }
         }
     }
 }

@@ -5,15 +5,10 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.view.animation.Animation;
-import android.view.inputmethod.InputMethodManager;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 import dependents.com.perfectrem.R;
-import java.lang.NumberFormatException;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
