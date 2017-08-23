@@ -15,10 +15,10 @@
                 <action android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <!-- NOTE: android:launchMode="singleInstance" is required, because
+        <!-- NOTE: android:launchMode="singleTop" is required, because
         it prevents the notification in the status bar from creating an extra AlarmActivity
         which prevents another alarm from playing. -->
         <activity android:name="com.perfectrem.AlarmActivity"
-            android:launchMode="singleInstance"/>
+            android:launchMode="singleTop"/>
     </application>
 </manifest>
