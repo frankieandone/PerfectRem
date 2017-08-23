@@ -30,6 +30,8 @@ public class AlarmActivity extends AppCompatActivity {
     private Runnable mChangeColorRunnable;
     private Handler mIncreaseVolumeHandler;
     private VolumeIncrementRunnable mVolumeIncrementRunnable;
+    // Arbitrary ID.
+    private static final int NOTIFICATION_ID = 105;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,10 @@ public class AlarmActivity extends AppCompatActivity {
                 if (mIncreaseVolumeHandler != null && mVolumeIncrementRunnable != null) {
                     mIncreaseVolumeHandler.removeCallbacks(mVolumeIncrementRunnable);
                 }
+                // Cancel the notification with ID: <NOTIFICATION_ID> after alarm has been stopped.
+                NotificationManager notifManager = (NotificationManager) getApplicationContext()
+                    .getSystemService(Context.NOTIFICATION_SERVICE);
+                notifManager.cancel(NOTIFICATION_ID);
             }
         });
         
@@ -126,8 +132,6 @@ public class AlarmActivity extends AppCompatActivity {
     }
 
     private void triggerNotification() {
-        // Arbitrary ID.
-        final int notifId = 105;
         NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(getApplicationContext())
             .setSmallIcon(R.mipmap.ic_alarm_add_white_48dp)
             .setContentTitle("PerfectRem")
@@ -140,7 +144,7 @@ public class AlarmActivity extends AppCompatActivity {
         notifBuilder.setContentIntent(resultPendingIntent);
         
         NotificationManager notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notifManager.notify(notifId, notifBuilder.build());
+        notifManager.notify(NOTIFICATION_ID, notifBuilder.build());
     }
 
     class VolumeIncrementRunnable implements Runnable {
