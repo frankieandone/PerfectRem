@@ -7,7 +7,9 @@
              android:clipChildren="false"
              android:orientation="horizontal"
              android:paddingLeft="16dp"
-             android:paddingRight="16dp">
+             android:paddingRight="16dp"
+             android:stretchColumns="2"
+    >
 
     <TableRow
         android:layout_width="wrap_content"
@@ -53,5 +55,34 @@
             app:backgroundTint="?android:attr/colorPressedHighlight"
             app:fabSize="normal"
             app:rippleColor="@android:color/holo_orange_dark"/>
+
+    </TableRow>
+
+    <TableRow>
+
+        <ImageView
+            android:id="@+id/image_view_alarm_on"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/image_view_alarm_on_content_description"
+            app:srcCompat="@mipmap/ic_alarm_on_white_48dp"/>
+
+        <TextView
+            android:id="@+id/text_view_time_output"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/text_view_time_output_text"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+            android:textColor="@android:color/white"/>
+
+        <ImageView
+            android:id="@+id/image_view_delete_alarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:contentDescription="@string/image_view_delete_alarm_content_description"
+            app:srcCompat="@mipmap/ic_highlight_off_white_48dp"/>
+
     </TableRow>
 </TableLayout>
