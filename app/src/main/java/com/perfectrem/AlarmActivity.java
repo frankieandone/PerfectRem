@@ -59,6 +59,9 @@ public class AlarmActivity extends AppCompatActivity {
                 NotificationManager notifManager = (NotificationManager) getApplicationContext()
                     .getSystemService(Context.NOTIFICATION_SERVICE);
                 notifManager.cancel(NOTIFICATION_ID);
+                // Navigate back to the MainActivity after alarm has been stopped.
+                Intent intent = new Intent(AlarmActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
         
