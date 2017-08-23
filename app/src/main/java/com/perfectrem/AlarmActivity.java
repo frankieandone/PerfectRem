@@ -1,6 +1,9 @@
 package com.perfectrem;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -11,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -78,6 +82,7 @@ public class AlarmActivity extends AppCompatActivity {
             mVolumeIncrementRunnable =
             new VolumeIncrementRunnable((AudioManager) getSystemService(Context.AUDIO_SERVICE),
             mIncreaseVolumeHandler);
+            triggerNotification();
         } catch (Exception ex) {
             Log.e(TAG, "Trouble playing sound.");
         }
@@ -118,6 +123,24 @@ public class AlarmActivity extends AppCompatActivity {
             }
         };
         mChangeColorHandler.postDelayed(mChangeColorRunnable, 1000);
+    }
+
+    private void triggerNotification() {
+        // Arbitrary ID.
+        final int notifId = 105;
+        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(getApplicationContext())
+            .setSmallIcon(R.mipmap.ic_alarm_add_white_48dp)
+            .setContentTitle("PerfectRem")
+            .setContentText("Alarm is running!")
+            // Removes the notification after single-use.
+            .setAutoCancel(true);
+        
+        Intent resultIntent = new Intent(this, AlarmActivity.class);
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 101, resultIntent , PendingIntent.FLAG_ONE_SHOT);
+        notifBuilder.setContentIntent(resultPendingIntent);
+        
+        NotificationManager notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notifManager.notify(notifId, notifBuilder.build());
     }
 
     class VolumeIncrementRunnable implements Runnable {
