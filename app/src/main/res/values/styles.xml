@@ -7,8 +7,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <!-- Disables the preview animation for the app. -->
         <item name="android:windowDisablePreview">true</item>
-    </style>
-    <style name="text_input_edit_text_hint_style"> parent="TextAppearance.Design.Hint">
-        <item name="android:textSize">24sp</item>
+        <!-- Avoids overdraw from child activities. -->
+        <item name="android:background">@null</item>
     </style>
 </resources>

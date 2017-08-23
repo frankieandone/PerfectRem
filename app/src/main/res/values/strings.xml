@@ -1,6 +1,3 @@
 <resources>
     <string name="app_name">PerfectREM</string>
-    <string name="button_start_alarm_text">START</string>
-    <string name="button_stop_alarm_text">STOP</string>
-    <string name="hint_text_hours_input">Hours</string>
 </resources>
